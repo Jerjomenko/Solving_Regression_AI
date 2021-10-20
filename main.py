@@ -1,7 +1,11 @@
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.preprocessing.text import Tokenizer, text_to_word_sequence
-import csv
+from tensorflow.keras.models import  Model
+from tensorflow.keras.layers import Input, Dense, Dropout, BatchNormalization, concatenate
+from tensorflow.keras.callbacks import ModelCheckpoint, LambdaCallback
+from tensorflow.keras.optimizers import Adam
+
 import pandas as pd
 import numpy as np
 
@@ -119,51 +123,48 @@ def getAllParametrs():
 
 xTrain = getAllParametrs()
 xTrain = np.array(xTrain)
-print(xTrain.shape)
-print(xTrain[0])
-
-#input1 = Input((xTrain.shape[1]))
-#input2 = Input((xTrainText01.shape[1]))
-
-#x1 = BatchNormalization()(input1)
-#x1 = Dropout(0.5)(x1)
-#x1 = Dense(10, activation="relu")(x1)
-#x1 = Dense(1000, activation="relu")(x1)
-#x1 = Dense(100, activation = "relu")(x1)
-
-#x2 = BatchNormalization()(input2)
-#x2 = Dense(10, activation="relu")(input2)
-#x2 = Dropout(0.5)(x2)
-#x2 = Dense(1000, activation="tanh")(x2)
-#x2 = Dense(5, activation = "elu")(x2)
 
 
-#x = concatenate([x1, x2])
+def my_model():
+  input1 = Input((xTrain.shape[1]))
+  input2 = Input((xTrainText01.shape[1]))
 
-#x = Dense(1000, activation="relu")(x)
-#x = Dropout(0.5)(x)
-#x = Dense(1, activation="relu")(x)
+  x1 = BatchNormalization()(input1)
+  x1 = Dropout(0.5)(x1)
+  x1 = Dense(10, activation="relu")(x1)
+  x1 = Dense(1000, activation="relu")(x1)
+  x1 = Dense(100, activation="relu")(x1)
 
-#model = Model((input1, input2), x)
+  x2 = BatchNormalization()(input2)
+  x2 = Dense(10, activation="relu")(input2)
+  x2 = Dropout(0.5)(x2)
+  x2 = Dense(1000, activation="tanh")(x2)
+  x2 = Dense(5, activation="elu")(x2)
 
-#filepath = "modelcheckpoint/ {epoch:02d}.hdf5"
-#save_callback = ModelCheckpoint(
-#    filepath,
-#    monitors = "mae",
-#    save_best_only = True
-#)
+  x = concatenate([x1, x2])
 
-#def on_epoch_end(epoch, logs):
-#  mae = logs["val_mae"]
-#  print(f"На эпохе {epoch} средняя ошибка состовляет {mae}")
+  x = Dense(1000, activation="relu")(x)
+  x = Dropout(0.5)(x)
+  x = Dense(1, activation="relu")(x)
 
-#output  = LambdaCallback(on_epoch_end=on_epoch_end)
+  model = Model((input1, input2), x)
 
-#model.compile(optimizer=Adam(lr=1e-3), loss="mse", metrics=["mae"])
+  filepath = "modelcheckpoint/ {epoch:02d}.hdf5"
+  save_callback = ModelCheckpoint(
+    filepath,
+    monitors="mae",
+    save_best_only=True
+  )
 
-#history = model.fit([xTrain[:850], xTrainText01[:850]],
-#                    yTrain[:850],
-#                    epochs= 550,
-#                    validation_data= ([xTrain[:850], xTrainText01[:850]],  yTrain[:850]),
-#                    verbose=0, shuffle=True, callbacks=[save_callback, output]
-#                    )
+  def on_epoch_end(epoch, logs):
+    mae = logs["val_mae"]
+    print(f"На эпохе {epoch} средняя ошибка состовляет {mae}")
+
+  output = LambdaCallback(on_epoch_end=on_epoch_end)
+
+  model.compile(optimizer=Adam(lr=1e-3), loss="mse", metrics=["mae"])
+
+  return model
+
+
+model2 = my_model()
