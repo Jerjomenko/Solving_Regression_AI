@@ -5,6 +5,8 @@ from tensorflow.keras.models import  Model, load_model
 from tensorflow.keras.layers import Input, Dense, Dropout, BatchNormalization, concatenate
 from tensorflow.keras.callbacks import ModelCheckpoint, LambdaCallback
 from tensorflow.keras.optimizers import Adam
+from sys import argv
+
 
 import pandas as pd
 import numpy as np
@@ -276,12 +278,33 @@ class PredictText:
     return res_pred
 
 
-a = MyPredict("Лондон", "FoodTech", "Зеленые технологии", "Идея")
-for_proba = a.all_together()
+#a = MyPredict("Лондон", "FoodTech", "Зеленые технологии", "Идея")
+#for_proba = a.all_together()
 
-d = PredictText("Самая лучшая технология в мире, на базе нанотехнологий с использованием регресивного микробиологического подхода гинетики и алгоритмов пятого уровня в ускоренном режиме.")
-for_proba2 = d.input_text_preprocessing()
+#d = PredictText("Самая лучшая технология в мире, на базе нанотехнологий с использованием регресивного микробиологического подхода гинетики и алгоритмов пятого уровня в ускоренном режиме.")
+#for_proba2 = d.input_text_preprocessing()
 
-proba = model.predict([for_proba, for_proba2])
-print(f"При данных парамтрах фирмы предположительные инвестиции могут составить - {int(proba)} $.")
+#proba = model.predict([for_proba, for_proba2])
+#print(f"При данных парамтрах фирмы предположительные инвестиции могут составить - {int(proba)} $.")
 
+print(argv)
+
+def end_predict(tw, p, th, s, tx):
+    x = MyPredict(tw, p, th, s)
+    end_p = x.all_together()
+    y = PredictText(tx)
+    end_p2 = y.input_text_preprocessing()
+    out = model.predict([end_p, end_p2])
+    print(f"При данных парамтрах фирмы предположительные инвестиции могут составить - {int(out)} $.")
+
+
+try:
+    tw, p, th, s, tx = argv
+except:
+    tw = "Лондон"
+    p = "FoodTech"
+    th = "Зеленые технологии"
+    s = "Идея"
+    tx = "Самая лучшая технология в мире, на базе нанотехнологий с использованием регресивного микробиологического подхода гинетики и алгоритмов пятого уровня в ускоренном режиме."
+
+end_predict(tw, p, th, s, tx)
