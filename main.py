@@ -286,10 +286,10 @@ class ListToUser:
   def parse_df(self):
     spis = []
     spis_sdel = []
-    for i in range(len(df3['Сфера стартапа'])):
-      if self.x == df3['Сфера стартапа'][i]:
+    for i in range(len(df2['Сфера стартапа'])):
+      if self.x == df2['Сфера стартапа'][i]:
         try:
-          spis.append(int(df3['Итоговая сумма, долл'][i]))
+          spis.append(int(df2['Итоговая сумма, долл'][i]))
           spis_sdel.append(i)
         except:
           pass
@@ -299,8 +299,8 @@ class ListToUser:
     list_of = []
     for i in range(5):
       for i in spis_sdel:
-        if int(df3['Итоговая сумма, долл'][i]) == max(spis):
-          list_of.append(df3.loc[i])
+        if int(df2['Итоговая сумма, долл'][i]) == max(spis):
+          list_of.append(df2.loc[i])
           spis.remove(max(spis))
           break
     return list_of
