@@ -278,24 +278,57 @@ class PredictText:
     return res_pred
 
 
-#a = MyPredict("Лондон", "FoodTech", "Зеленые технологии", "Идея")
-#for_proba = a.all_together()
+class ListToUser:
 
-#d = PredictText("Самая лучшая технология в мире, на базе нанотехнологий с использованием регресивного микробиологического подхода гинетики и алгоритмов пятого уровня в ускоренном режиме.")
-#for_proba2 = d.input_text_preprocessing()
+  def __init__(self, x):
+    self.x = x
 
-#proba = model.predict([for_proba, for_proba2])
-#print(f"При данных парамтрах фирмы предположительные инвестиции могут составить - {int(proba)} $.")
+  def parse_df(self):
+    spis = []
+    spis_sdel = []
+    for i in range(len(df3['Сфера стартапа'])):
+      if self.x == df3['Сфера стартапа'][i]:
+        try:
+          spis.append(int(df3['Итоговая сумма, долл'][i]))
+          spis_sdel.append(i)
+        except:
+          pass
+      else:
+        pass
 
-print(argv)
+    list_of = []
+    for i in range(5):
+      for i in spis_sdel:
+        if int(df3['Итоговая сумма, долл'][i]) == max(spis):
+          list_of.append(df3.loc[i])
+          spis.remove(max(spis))
+          break
+    return list_of
+
+  def show_keys(self):
+    l = self.parse_df()
+    output = []
+    for i in range(len(l)):
+      out = []
+      out.append(l[i][47])
+      out.append(l[i][48])
+      out.append(f"{l[i][3]} {int(l[i][45])}$ {str(l[i][1])}")
+
+      output.append(out)
+
+    return output
+
+
 
 def end_predict(tw, p, th, s, tx):
+    w = ListToUser(p)
+    end_l = w.show_keys()
     x = MyPredict(tw, p, th, s)
     end_p = x.all_together()
     y = PredictText(tx)
     end_p2 = y.input_text_preprocessing()
     out = model.predict([end_p, end_p2])
-    print(f"При данных парамтрах фирмы предположительные инвестиции могут составить - {int(out)} $.")
+    return f"При данных парамтрах фирмы предположительные инвестиции могут составить - {int(out)} $." , end_l
 
 
 try:
