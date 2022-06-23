@@ -1,5 +1,6 @@
 # Solving_Regression_AI
-A full-coherent neural network, to solve a regression problem. Two input: text, data. Output --> nuber.
+
+Ein vollkohärentes neuronales Netz, um ein Regressionsproblem zu lösen. Zwei Eingaben: Text, Daten. Ausgabe --> number.
 
 Lösung Regressionaufgabe / Tensorflow.
 Eigenes Back-End mithilfe / Kivy.
