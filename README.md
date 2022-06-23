@@ -4,7 +4,7 @@ Ein vollkohärentes neuronales Netz, um ein Regressionsproblem zu lösen. Zwei E
 
 Lösung Regressionaufgabe / Tensorflow.
 
-Eigenes Back-End mithilfe / Kivy.
+Eigenes Back-End / Kivy.
 
 Analyse von verfügbare DataBase.
 
